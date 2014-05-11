@@ -30,7 +30,7 @@ func valid(utc int64) bool {
 	return t.After(start) && t.Before(end)
 }
 
-func Records(path string) (records []RecordHour, err error) {
+func Records(path string) (records []RecordHour, total int64, err error) {
 	in, err := os.OpenFile(path, os.O_RDONLY, 0600)
 	if err != nil {
 		return
@@ -40,7 +40,6 @@ func Records(path string) (records []RecordHour, err error) {
 	r.Comma = '\t'
 	r.FieldsPerRecord = 6
 	data, err := r.ReadAll()
-
 	for _, v := range data[1:] {
 		var rec RecordHour
 		rec.Utc, _ = strconv.ParseInt(v[1], 10, 64)
@@ -53,6 +52,7 @@ func Records(path string) (records []RecordHour, err error) {
 		rec.ValueAvg, _ = strconv.ParseInt(v[4], 10, 64)
 		rec.ValueMax, _ = strconv.ParseInt(v[5], 10, 64)
 		records = append(records, rec)
+		total += rec.ValueAvg * 3600 / 8
 	}
 
 	return

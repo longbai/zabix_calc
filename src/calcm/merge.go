@@ -46,6 +46,15 @@ func mergeMax(args [][]RecordHour) (ret []*MergeHour) {
 	return
 }
 
+var total int64
+
+func calcThoughput(records []*MergeHour) (amount int64) {
+	for _, v := range records {
+		amount += v.Total * 3600 / 8
+	}
+	return
+}
+
 func merge(args [][]RecordHour) (ret []*MergeHour) {
 	store := map[int64]*MergeHour{}
 	for _, arg := range args {

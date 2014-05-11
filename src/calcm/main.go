@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"flag"
 	"fmt"
-	// "io"
+	hum "github.com/dustin/go-humanize"
 	"io/ioutil"
 )
 
@@ -20,12 +20,12 @@ func main() {
 	args := flag.Args()
 	rets := [][]RecordHour{}
 	for _, v := range args {
-		fmt.Println(v)
-		ret, err := Records(v)
+		ret, total, err := Records(v)
 		if err != nil {
 			fmt.Println(err)
 			return
 		}
+		fmt.Println("amount", v, hum.Comma(total))
 		rets = append(rets, ret)
 	}
 
@@ -33,19 +33,15 @@ func main() {
 
 	fmt.Println("length", len(result))
 	pos := int(float32(len(result)) * 0.95)
-
+	amount := calcThoughput(result)
+	fmt.Println("total amount", hum.Comma(amount), hum.Bytes(uint64(amount)))
+	var rec *MergeHour
 	fmt.Println("-----------avg-------------")
-	fmt.Println(pos, result[pos])
-	fmt.Println(pos+1, result[pos+1])
-	fmt.Println(len(result)-1, result[len(result)-1])
+	rec = result[pos]
+	fmt.Println(pos, rec, hum.Comma(rec.Total), hum.Bytes(uint64(rec.Total)))
+	rec = result[len(result)-1]
+	fmt.Println(pos, rec, hum.Comma(rec.Total), hum.Bytes(uint64(rec.Total)))
 	d, _ := json.MarshalIndent(result, "", "")
 	ioutil.WriteFile(*output, d, 0777)
-
-	fmt.Println("-----------max-------------")
-	result = mergeMax(rets)
-	fmt.Println(pos, result[pos])
-	fmt.Println(pos+1, result[pos+1])
-	fmt.Println(len(result)-1, result[len(result)-1])
-
 	return
 }

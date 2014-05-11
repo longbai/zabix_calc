@@ -38,9 +38,13 @@ func main() {
 	var rec *MergeHour
 	fmt.Println("-----------avg-------------")
 	rec = result[pos]
-	fmt.Println(pos, rec, hum.Comma(rec.Total), hum.Bytes(uint64(rec.Total)))
-	rec = result[len(result)-1]
-	fmt.Println(pos, rec, hum.Comma(rec.Total), hum.Bytes(uint64(rec.Total)))
+	fmt.Println("95%", pos, rec, hum.Comma(rec.Total), hum.Bytes(uint64(rec.Total)))
+	pos = len(result) - 4
+	rec = result[pos]
+	fmt.Println("4th", pos, rec, hum.Comma(rec.Total), hum.Bytes(uint64(rec.Total)))
+	pos = len(result) - 1
+	rec = result[pos]
+	fmt.Println("max", pos, rec, hum.Comma(rec.Total), hum.Bytes(uint64(rec.Total)))
 	d, _ := json.MarshalIndent(result, "", "")
 	ioutil.WriteFile(*output, d, 0777)
 	return

@@ -24,8 +24,8 @@ var zone *time.Location = time.FixedZone("CST", 8*3600)
 
 func valid(utc int64) bool {
 	t := time.Unix(utc, 0)
-	start := time.Date(2014, 4, 1, 0, 0, 0, 0, zone)
-	end := time.Date(2014, 5, 1, 0, 0, 0, 1, zone)
+	start := time.Date(2014, 6, 1, 0, 0, 0, 0, zone)
+	end := time.Date(2014, 7, 1, 0, 0, 0, 1, zone)
 
 	return t.After(start) && t.Before(end)
 }
